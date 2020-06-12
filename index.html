@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+
+        body {
+          background-color: #1f1f1f;
+        }
+        .Title {
+            font-family: Helvetica;
+            font-weight: lighter;
+            font-size: 32px;
+            color: whitesmoke;
+            padding: 32px;
+            background-color: #4573ed;
+            margin: auto;
+            margin-left: -10px;
+            margin-right: -10px;
+            margin-top: -10px;
+            text-align: center;
+        }
+        .buttonholder{
+            border:none;
+            padding-left: 16px;
+            background-color: #2e2e2e;
+            box-shadow: 0px 0px 8px #1f1f1f;
+            margin-left: -10px;
+            margin-right: -10px;
+        }
+        .button {
+            border: none;
+            color: white;
+            padding: 16px 32px; 
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            font-family: Roboto;
+            margin: 16px 8px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border-radius: 16px;
+            box-shadow: 0px 0px 12px #171717;
+        }
+        .SortMethods {
+            background-color: #e6e6e6; 
+            color: darkslategrey; 
+            border: none;
+        }
+        .SortMethods:hover {
+            background-color: dodgerblue;
+            color: white;
+        }
+        .SortMethods:focus{
+            background-color: deepskyblue;
+            color: white;
+        }
+        :target{
+            background-color: deepskyblue;
+            color: white;
+        }
+
+        .NewArrayHolder{
+            padding-left: 16px;
+            padding-top : 16px;
+
+        }
+        .newArrayButton{
+            box-shadow: 0px 0px 12px black;
+            padding: 16px 16px; 
+            font-family: Roboto;
+            border-radius: 16px;
+            transition-duration: 0.4s;
+            margin-right: 16px;
+        }
+        .NewArray{
+            background-color: #e6e6e6; 
+            color: darkslategrey; 
+            border: none;
+        }
+        .NewArray:hover{
+            background-color: dodgerblue;
+            color: white;
+        }
+        .arraySortHolder{
+            margin: auto;
+            margin-top: 16px;
+            background-color:transparent;
+            padding:16px;
+            border-radius: 16px;
+            text-align: center;
+            vertical-align: bottom;
+
+        }
+        .slider {
+          -webkit-appearance: none;
+          width: 25%;
+          height: 16px;
+          background: #d3d3d3;
+          outline: none;
+          opacity: 0.7;
+          -webkit-transition: .2s;
+          transition: opacity .2s;
+          margin-right: 18px;
+          box-shadow: 0px 0px 12px black;
+            border-radius: 32px;
+        }
+        .slider:hover {
+          opacity: 1;
+        }
+        .slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 25px;
+          height: 25px;
+          background-color: deepskyblue;
+          border-radius: 32px;
+
+          cursor: pointer;
+        }
+        .slider::-moz-range-thumb {
+          width: 25px;
+          height: 25px;
+          background: #4CAF50;
+          cursor: pointer;
+        }
+
+    </style>
+</head>
+<body onload ="Start();">
+    <h1 class ="Title">Sorting Algorithim Visualizer</h1>
+
+    <div class ="buttonholder">
+        <button class="button SortMethods" id = "bubbleSort" onclick = "ModeSelection(0)">Bubble Sort</button>
+        <button class="button SortMethods" id = "insertionSort" onclick = "ModeSelection(1)">Insertion Sort</button>
+    </div>
+    <div class ="NewArrayHolder">
+        <button class="newArrayButton NewArray" id ="NewArray" onclick ="createRandomArray(0,50)" >New Array</button>
+
+        <input type="range" min="5" max="100" value="15" class="slider" id="arraySizeSlider" oninput="newSize(value)"/>
+
+        <button class="newArrayButton NewArray" id ="sortButton" onclick ="StartSorting()">Sort Array</button>
+    </div>
+
+
+    <div class ="arraySortHolder" id ="arrays" onselectstart = "return false">
+
+    </div>
+
+    <script src ="app.js"></script>
+
+</body>
+</html>
