@@ -13,6 +13,7 @@ class BubbleSort {
         this.forLoopI = 0;
         this.switched = false;
 
+        this.pushDown = 0;
         this.lastIndex = 0;
     }
     Sort() {
@@ -54,7 +55,7 @@ class BubbleSort {
                 isSorted = true;
             }
         }
-
+        
         return this.array.slice();
     }
 
@@ -73,9 +74,10 @@ class BubbleSort {
 
 
                 //for loop
-                if (this.forLoopI < this.LengthOfArray) {
+                if (this.forLoopI < this.LengthOfArray - this.pushDown) {
                     if (this.forLoopI + 1 < this.LengthOfArray) {
                         let i = this.forLoopI;
+                        changeFrequency(this.array[i + 1].id);
                         this.array[i].style.background = "white";
                         this.array[i + 1].style.background = "white";
                         if (this.array[i + 1].id * 10 < this.array[i].id * 10) {
@@ -95,10 +97,14 @@ class BubbleSort {
                 }
                 else {
                     this.forLoopI = 0;
+                    this.pushDown++;
                     //check if it is sorted
                     if (this.switched == false) {
                         this.isSorted = true;
                         InitiateSorting = false;
+                    }
+                    if (lastIndex + 1 < this.LengthOfArray) {
+                        this.array[lastIndex + 1].style.background = "#ff214e";
                     }
                     this.switched = false;
                 }
@@ -158,10 +164,10 @@ class InsertionSort {
                     this.array[this.lastIndex - 1].style.background = "#ff214e";
                 }
                 this.lastIndex = this.currentIndex;
-
                 if (this.currentIndex > 0) {
                     this.inWhileLoop = true;
                     let currentIndex = this.currentIndex;
+                    changeFrequency(this.array[currentIndex - 1].id);
                     this.array[currentIndex].style.background = "white";
                     this.array[currentIndex - 1].style.background = "white";
 
@@ -209,6 +215,110 @@ class InsertionSort {
     }
 };
 
+class SelectionSort {
+
+    constructor(array) {
+        this.array = array;
+        this.timer = 0;
+
+        this.inWhileLoop = false;
+        this.forLoopI = 0;
+        this.inForLoop = false;
+
+        this.RightBound = this.array.length;
+        this.LeftBound = 0;
+
+        this.indexOfMInValue = -1;
+    }
+
+    Sort() {
+        let RightBound = this.array.length;
+        let LeftBound = 0;
+
+        while (LeftBound < RightBound) {
+            let minValue = this.array[LeftBound];
+            let indexOfMInValue = -1;
+
+            for (var i = this.LeftBound; i < this.RightBound; i++) {
+                if (minValue > this.array[i]) {
+                    minValue = this.array[i];
+                    indexOfMInValue = i;
+                }
+            }
+            if (indexOfMInValue > -1) {
+                this.array[indexOfMInValue] = this.array[LeftBound];
+                this.array[LeftBound] = minValue;
+            }
+            this.LeftBound++;
+        }
+    }
+
+
+    continuousSort(frameDelay) {
+        if (this.timer > frameDelay) {
+            //while loop
+            console.log("sorting");
+            if (this.LeftBound < this.RightBound) {
+
+                if (!this.inForLoop) {
+                    this.array[this.LeftBound].style.background = "#ff214e";
+                    this.minValue = this.array[this.LeftBound].id;
+                    this.minValueHeight = this.array[this.LeftBound].style.height;
+                    this.minText = this.array[this.LeftBound].innerHTML;
+
+                    this.indexOfMInValue = -1;
+                    this.forLoopI = this.LeftBound;
+                }
+                //for loop
+                if (this.forLoopI > 0) {
+                    this.array[this.forLoopI - 1].style.background = "#ff214e";
+                }
+                if (this.forLoopI < this.RightBound) {
+                    this.inForLoop = true;
+                    this.array[this.LeftBound].style.background = "white";
+                    this.array[this.forLoopI].style.background = "white";
+
+                    changeFrequency(this.array[this.forLoopI].id);
+
+                    if (this.minValue * 10 > this.array[this.forLoopI].id * 10) {
+
+                        this.minValue = this.array[this.forLoopI].id
+                        this.minValueHeight = this.array[this.forLoopI].style.height;
+                        this.minText = this.array[this.forLoopI].innerHTML;
+                        this.indexOfMInValue = this.forLoopI;
+
+                    }
+                    this.forLoopI++;
+                }
+                else {
+                    this.inForLoop = false;
+                }
+                //
+
+                if (!this.inForLoop) {
+                    if (this.indexOfMInValue > -1) {
+                        this.array[this.indexOfMInValue].id = this.array[this.LeftBound].id;
+                        this.array[this.LeftBound].id = this.minValue;
+
+                        this.array[this.indexOfMInValue].style.height = this.array[this.LeftBound].style.height;
+                        this.array[this.LeftBound].style.height = this.minValueHeight;
+
+                        this.array[this.indexOfMInValue].innerHTML = this.array[this.LeftBound].innerHTML;
+                        this.array[this.LeftBound].innerHTML = this.minText;
+                    }
+                    this.LeftBound++;
+                }
+            }
+            else {
+                InitiateSorting = false;
+            }
+            //
+            this.timer = 0;
+        }
+        this.timer++;
+        return this.array.slice();
+    }
+};
 
 var sizeOfArray = 15;
 var array = new Array(sizeOfArray);
@@ -289,6 +399,17 @@ setInterval(function () {
     Main();
 }, 0);
 
+var context = new (window.AudioContext || window.webkitAudioContext)();
+var osc = context.createOscillator(); // instantiate an oscillator
+osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
+
+function changeFrequency(value) {
+
+    osc.frequency.value = value * 20;
+}
+osc.frequency.value = 0; // Hz
+osc.start(); // start the oscillator
+
 InitiateSorting = false;
 var sorter; //the sorting class
 function StartSorting() {
@@ -304,9 +425,12 @@ function StartSorting() {
     else if (algMode == 1) {
         sorter = new InsertionSort(arrayOftheDivs);
     }
+    else if (algMode == 2) {
+        sorter = new SelectionSort(arrayOftheDivs);
+    }
 }
 
-let speedOfSort = 10;
+let speedOfSort = 1;
 var sortButtonColor;
 var methodButtonColor;
 var buttonSort;
@@ -322,6 +446,7 @@ function Start() {
 }
 //main loop
 //it is being updated every frame
+var startedSound = false;
 function Main() {
     if (InitiateSorting) {
         buttonSort.disabled = true;
@@ -331,6 +456,11 @@ function Main() {
         for (var i = 0; i < sortingMethodButton.length; i++) {
             sortingMethodButton[i].style.background = "gray";
         }
+        if (!startedSound) {
+            osc.connect(context.destination);
+        }
+        startedSound = true;
+
 
         arrayOftheDivs = sorter.continuousSort(speedOfSort);
     }
@@ -339,6 +469,10 @@ function Main() {
         buttonSort.style.background = sortButtonColor;
         sortingMethodButton.disabled = false;
 
+        if (startedSound) {
+            osc.disconnect(context.destination);
+            startedSound = false;
+        }
         for (var i = 0; i < sortingMethodButton.length; i++) {
             sortingMethodButton[i].style.background = methodButtonColor;
         }
